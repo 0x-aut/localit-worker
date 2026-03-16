@@ -56,6 +56,7 @@ async function pollPendingRuns(): Promise<void> {
       .order('created_at', { ascending: true })
       .limit(1)
 
+    console.log("Gotten data from supabase")
     if (error) {
       console.error('Poll error:', error.message)
       return
