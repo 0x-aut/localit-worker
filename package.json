@@ -2,18 +2,17 @@
   "name": "localit-worker",
   "version": "1.0.0",
   "description": "Worker for actually running diffs for localit",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start:prod": "node dist/index.js",
-    "postinstall": "npx playwright install --with-deps chromium"
+    "start:prod": "node dist/index.js"
   },
   "keywords": [],
   "author": "0xaut",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",
     "canvas": "^3.2.1",
