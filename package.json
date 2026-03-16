@@ -1,0 +1,31 @@
+{
+  "name": "localit-worker",
+  "version": "1.0.0",
+  "description": "Worker for actually running diffs for localit",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start:prod": "node dist/index.js",
+    "postinstall": "npx playwright install --with-deps chromium"
+  },
+  "keywords": [],
+  "author": "0xaut",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.1",
+    "canvas": "^3.2.1",
+    "dotenv": "^17.3.1",
+    "groq-sdk": "^1.1.1",
+    "pixelmatch": "^7.1.0",
+    "playwright": "^1.58.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/pixelmatch": "^5.2.6",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
