@@ -1,5 +1,5 @@
 import Groq from 'groq-sdk';
-import { AIAnalysisResult } from './types';
+import { AIAnalysisResult } from './types.js';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
