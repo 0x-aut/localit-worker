@@ -2,7 +2,7 @@ import 'dotenv/config'
 import http from 'http'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { processRun } from './runner.js'
-import { AuditRun } from './types.js'
+import { AuditRun, Project } from './types.js'
 
 const supabase: SupabaseClient = createClient(
   process.env.SUPABASE_URL!,
@@ -62,8 +62,12 @@ async function pollPendingRuns(): Promise<void> {
     }
 
     if (!runs || runs.length === 0) return
-
-    const run = runs[0] as AuditRun
+    
+    const raw = runs[0] as unknown as Omit<AuditRun, 'projects'> & { projects: Project[] }
+    const run: AuditRun = {
+      ...raw,
+      projects: raw.projects[0],
+    }
     console.log(`\n📋 Picked up run ${run.id}`)
     await processRun(run, supabase)
   } catch (err) {
