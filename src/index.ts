@@ -56,7 +56,6 @@ async function pollPendingRuns(): Promise<void> {
       .order('created_at', { ascending: true })
       .limit(1)
 
-    console.log("runs::", runs)
     if (error) {
       console.error('Poll error:', error.message)
       return
@@ -65,12 +64,10 @@ async function pollPendingRuns(): Promise<void> {
     if (!runs || runs.length === 0) return
     
     const raw = runs[0] as unknown as Omit<AuditRun, 'projects'> & { projects: Project }
-    console.log("raw::", raw)
     const run: AuditRun = {
       ...raw,
       projects: raw.projects,
     }
-    console.log("newrun", run)
     console.log(`\n📋 Picked up run ${run.id}`)
     await processRun(run, supabase)
   } catch (err) {
