@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import http from 'http'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { processRun } from './runner.js'
 import { AuditRun } from './types.js'
@@ -8,6 +9,24 @@ const supabase: SupabaseClient = createClient(
   process.env.SUPABASE_PUBLISHABLE_KEY!
 )
 
+// ── Health check server (required by Koyeb) ───────────────────────────────────
+const PORT = process.env.PORT ?? 3001
+
+const healthServer = http.createServer((req, res) => {
+  if (req.method === 'GET' && req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ status: 'ok', worker: 'localit' }))
+  } else {
+    res.writeHead(404)
+    res.end()
+  }
+})
+
+healthServer.listen(PORT, () => {
+  console.log(`🟢 Health server listening on port ${PORT}`)
+})
+
+// ── Polling loop ──────────────────────────────────────────────────────────────
 console.log('🌍 Localit worker starting...')
 
 async function pollPendingRuns(): Promise<void> {
@@ -47,7 +66,6 @@ async function pollPendingRuns(): Promise<void> {
     const run = runs[0] as AuditRun
     console.log(`\n📋 Picked up run ${run.id}`)
     await processRun(run, supabase)
-
   } catch (err) {
     console.error('Unexpected poll error:', (err as Error).message)
   }
